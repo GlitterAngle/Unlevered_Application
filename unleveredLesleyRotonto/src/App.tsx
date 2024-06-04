@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, {useEffect, useState} from 'react'
+import { Routes, Route } from 'react-router-dom';
+import axios from 'axios';
+import './App.css';
+
+// Import pages and nav component
+import Nav from './components/NavBar/nav';
+import Landing from './pages/Landing/Landing';
+import Apple from './pages/Apple/Apple'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [stockInfo, setStockInfo] = useState<any>(null)
+
+  useEffect(()=>{
+    const fetchData = async ()=>{
+      try {
+        const reuslt = await axios.get(`http://127.0.0.1:8000/financials`)
+        setStockInfo(reuslt.data)
+      } catch (error) {
+        console.error("Error fetching finnancial data", error)
+      }
+    }
+    fetchData()
+  },[])
+
+  if(!stockInfo){
+    return <div>Loading...</div>
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Nav />
+        <Routes>
+          <Route path="" element={<Landing />} />
+          <Route path="apple" element={<Apple stockInfo={stockInfo}/>}/>
+        </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
