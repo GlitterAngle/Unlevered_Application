@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
@@ -9,9 +9,26 @@ import Landing from './pages/Landing/Landing';
 import Apple from './pages/Apple/Apple'
 
 
+interface AnalystEstimates {
+  [key: string]: number;
+}
+
+interface StockInfo {
+  market_cap: number;
+  shares_outstanding: number;
+  pe_ratio: number;
+  ps_ratio: number;
+  pb_ratio: number;
+  peg_ratio: number;
+  current_ratio: number;
+  debt_to_equity_ratio: number;
+  eps: number;
+  analyst_estimates: AnalystEstimates;
+}
+
 function App() {
 
-  const [stockInfo, setStockInfo] = useState<any>(null)
+  const [stockInfo, setStockInfo] = useState<StockInfo | null>(null)
 
   useEffect(()=>{
     const fetchData = async ()=>{
