@@ -37,7 +37,7 @@ const Apple: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/api/financials');
+                const response = await axios.get('/.netlify/functions/financials');
                 setStockInfo(response.data);
             } catch (error) {
                 setError('Error fetching financial data');
